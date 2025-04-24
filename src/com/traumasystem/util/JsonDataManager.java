@@ -111,4 +111,15 @@ public class JsonDataManager {
             return LocalDate.parse(json.getAsString(), formatter);
         }
     }
+    /**
+     * Delete a patient from the file system
+     *
+     * @param patientId The ID of the patient to delete
+     * @return true if the patient was deleted successfully, false otherwise
+     */
+    public boolean deletePatient(String patientId) {
+        String fileName = dataDirectory + File.separator + "patient_" + patientId + ".json";
+        File file = new File(fileName);
+        return file.exists() && file.delete();
+    }
 }

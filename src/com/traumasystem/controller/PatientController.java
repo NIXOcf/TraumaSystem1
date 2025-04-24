@@ -88,4 +88,23 @@ public class PatientController {
                         p.getRut().replace(".", "").replace("-", "").contains(term))
                 .collect(Collectors.toList());
     }
+    /**
+     * Delete a patient by ID
+     *
+     * @param patientId The ID of the patient to delete
+     * @return true if the patient was deleted successfully, false otherwise
+     */
+    public boolean deletePatient(String patientId) {
+        return dataManager.deletePatient(patientId);
+    }
+
+    /**
+     * Delete a patient
+     *
+     * @param patient The patient to delete
+     * @return true if the patient was deleted successfully, false otherwise
+     */
+    public boolean deletePatient(Patient patient) {
+        return deletePatient(patient.getId());
+    }
 }

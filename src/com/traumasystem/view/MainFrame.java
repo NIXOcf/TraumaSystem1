@@ -110,8 +110,61 @@ public class MainFrame extends JFrame {
         southPanel.add(viewButton);
         southPanel.add(editButton);
         add(southPanel, BorderLayout.SOUTH);
-    }
+        JButton deleteButton = new JButton("Eliminar");
+        deleteButton.addActionListener(e -> {
+            int row = patientTable.getSelectedRow();
+            if (row >= 0) {
+                deletePatient(row);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Por favor seleccione un paciente",
+                        "Ningún paciente seleccionado",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
+        southPanel.add(viewButton);
+        southPanel.add(editButton);
+        southPanel.add(deleteButton); // Añadido el botón de eliminar
+    }
+    private void deletePatient(int row) {
+        try {
+            List<Patient> patients = controller.getAllPatients();
+            if (row < patients.size()) {
+                Patient patient = patients.get(row);
+
+                // Pedir confirmación
+                int option = JOptionPane.showConfirmDialog(this,
+                        "¿Está seguro de que desea eliminar el paciente " + patient.getNombre() + "?",
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+
+                if (option == JOptionPane.YES_OPTION) {
+                    boolean success = controller.deletePatient(patient);
+                    if (success) {
+                        JOptionPane.showMessageDialog(this,
+                                "Paciente eliminado correctamente",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                        // Recargar la lista de pacientes
+                        loadPatients();
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "No se pudo eliminar el paciente",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al eliminar el paciente: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void loadPatients() {
         try {
             List<Patient> patients = controller.getAllPatients();
